@@ -1,0 +1,24 @@
+{
+  "name": "DashboardWidgetSettings",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "dashboard": {
+      "type": "belongsTo",
+      "model": "Dashboard",
+      "foreignKey": ""
+    },
+    "widgetSettings": {
+      "type": "belongsTo",
+      "model": "WidgetSettings",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

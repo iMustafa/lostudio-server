@@ -1,0 +1,15 @@
+{
+  "db": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "mongodb://localhost:27017/lostudio",
+    "database": "lostudio",
+    "password": "",
+    "name": "db",
+    "user": "",
+    "connector": "mongodb",
+    "useNewUrlParser": true,
+    "allowExtendedOperators": true,
+    "useUnifiedTopology": true
+  }
+}

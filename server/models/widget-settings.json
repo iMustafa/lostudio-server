@@ -1,0 +1,39 @@
+{
+  "name": "WidgetSettings",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "config": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "widget": {
+      "type": "belongsTo",
+      "model": "Widget",
+      "foreignKey": ""
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": ""
+    },
+    "dataSource": {
+      "type": "belongsTo",
+      "model": "DataSource",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,45 @@
+{
+  "name": "user",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "widgetSettings": {
+      "type": "hasMany",
+      "model": "WidgetSettings",
+      "foreignKey": "",
+      "through": "UserWidgetSettings"
+    },
+    "dashboards": {
+      "type": "hasMany",
+      "model": "Dashboard",
+      "foreignKey": "",
+      "through": "UserDashboards"
+    },
+    "dataSources": {
+      "type": "hasMany",
+      "model": "DataSource",
+      "foreignKey": "",
+      "through": "UserDataSource"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}

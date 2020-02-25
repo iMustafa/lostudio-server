@@ -19,6 +19,8 @@
     "loopback-component-explorer": "^6.2.0",
     "loopback-connector-mongodb": "^3.9.2",
     "mongodb": "^3.5.2",
+    "mssql": "^6.0.1",
+    "pg": "^7.18.1",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^3.0.0"
   },

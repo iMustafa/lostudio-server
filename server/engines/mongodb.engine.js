@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient
 
-exports.testConnection = (datasource) => new Promise(async (resolve, reject) => {
+exports.testConnection = ({ datasource }) => new Promise(async (resolve, reject) => {
   const { url } = datasource.config
   try {
     const connection = await MongoClient.connect(url, { useUnifiedTopology: true })
@@ -10,11 +10,14 @@ exports.testConnection = (datasource) => new Promise(async (resolve, reject) => 
       message: "Database connection test passed"
     })
   } catch (e) {
-    reject(e)
+    reject({
+      status: "Connection Failed",
+      data: e
+    })
   }
 })
 
-exports.getDocList = (datasource) => new Promise(async (resolve, reject) => {
+exports.getDocList = ({ datasource }) => new Promise(async (resolve, reject) => {
   const { server, port } = datasource.config
   try {
     const client = await MongoClient.connect(`mongodb://${server}:${port}`, { useUnifiedTopology: true })
@@ -26,7 +29,7 @@ exports.getDocList = (datasource) => new Promise(async (resolve, reject) => {
   }
 })
 
-exports.getFieldList = (datasource, docId) => new Promise(async (resolve, reject) => {
+exports.getFieldList = ({ datasource, docId }) => new Promise(async (resolve, reject) => {
   const { server, port } = datasource.config
   try {
     const client = await MongoClient.connect(`mongodb://${server}:${port}`, { useUnifiedTopology: true })
@@ -46,10 +49,16 @@ exports.getFieldList = (datasource, docId) => new Promise(async (resolve, reject
   }
 })
 
-exports.getValueList = (datasource, docId, fieldId) => new Promise(async (resolve, reject) => {
 
-})
-
-exports.queryDatasource = (datasource, docId) => new Promise(async (resolve, reject) => {
-
+exports.queryDatasource = ({ datasource, docId, query }) => new Promise(async (resolve, reject) => {
+  const { server, port } = datasource.config
+  try {
+    const client = await MongoClient.connect(`mongodb://${server}:${port}`, { useUnifiedTopology: true })
+    const db = client.db(datasource.config.db)
+    const collection = db.collection(docId)
+    const queryResult = await collection.find(query).toArray()
+    resolve(queryResult)
+  } catch (e) {
+    reject(e)
+  }
 })

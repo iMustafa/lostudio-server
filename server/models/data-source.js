@@ -15,12 +15,12 @@ module.exports = function (Datasource) {
     http: { verb: 'get', path: '/test-connection' }
   })
 
-  Datasource.prototype.testConnection = function (req) {
-    return Engines[this.type].testConnection(this)
+  Datasource.prototype.testConnection = function (options, req) {
+    return Engines[this.type].testConnection({ datasource: this })
   }
 
   Datasource.remoteMethod('getDocList', {
-    description: 'check connection to data engine',
+    description: 'Get Documents List of A table',
     accessType: 'READ',
     isStatic: false,
     accepts: [
@@ -31,12 +31,12 @@ module.exports = function (Datasource) {
     http: { verb: 'get', path: '/doc-list' }
   })
 
-  Datasource.prototype.getDocList = function (req) {
-    return Engines[this.type].getDocList(this)
+  Datasource.prototype.getDocList = function (options, req) {
+    return Engines[this.type].getDocList({ datasource: this })
   }
 
   Datasource.remoteMethod('getFieldList', {
-    description: 'check connection to data engine',
+    description: 'Get fields list of a table',
     accessType: 'READ',
     isStatic: false,
     accepts: [
@@ -49,7 +49,25 @@ module.exports = function (Datasource) {
   })
 
   Datasource.prototype.getFieldList = function (docId, options, req) {
-    return Engines[this.type].getFieldList(this, docId)
+    return Engines[this.type].getFieldList({ datasource: this, docId })
+  }
+
+  Datasource.remoteMethod('queryDataSource', {
+    description: 'Post a query to the datasource',
+    accessType: 'READ',
+    isStatic: false,
+    accepts: [
+      { arg: 'docId', type: 'string', http: { source: 'query' } },
+      { arg: 'query', type: 'object', http: { source: 'body' } },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'req', type: 'object', http: { source: 'req' } }
+    ],
+    returns: { arg: 'data', type: 'array', root: true },
+    http: { verb: 'post', path: '/query' }
+  })
+
+  Datasource.prototype.queryDataSource = function (docId, query, options, req) {
+    return Engines[this.type].queryDatasource({ datasource: this, docId, query })
   }
 
 }

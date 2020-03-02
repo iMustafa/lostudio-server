@@ -3,6 +3,16 @@ const Engines = require('../engines')
 
 module.exports = function (Datasource) {
 
+  Datasource.beforeRemote('create', (ctx, _, _next) => new Promise(async (resolve, reject) => {
+    const { data } = ctx.args
+    try {
+      const connection = await Engines[data.type].testConnection({ datasource: data })
+      resolve()
+    } catch (e) {
+      reject(e)
+    }
+  }))
+
   Datasource.remoteMethod('testConnection', {
     description: 'check connection to data engine',
     accessType: 'READ',

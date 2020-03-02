@@ -1,7 +1,9 @@
 const MongoClient = require('mongodb').MongoClient
 
 exports.testConnection = ({ datasource }) => new Promise(async (resolve, reject) => {
-  const { url } = datasource.config
+  const { db, user, password, server, port } = datasource.config
+  const url = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
+  console.log(url)
   try {
     const connection = await MongoClient.connect(url, { useUnifiedTopology: true })
     await connection.close(true)
@@ -11,16 +13,17 @@ exports.testConnection = ({ datasource }) => new Promise(async (resolve, reject)
     })
   } catch (e) {
     reject({
-      status: "Connection Failed",
+      message: "Connection Failed",
       data: e
     })
   }
 })
 
 exports.getDocList = ({ datasource }) => new Promise(async (resolve, reject) => {
-  const { server, port } = datasource.config
+  const { db, user, password, server, port } = datasource.config
+  const { url } = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
   try {
-    const client = await MongoClient.connect(`mongodb://${server}:${port}`, { useUnifiedTopology: true })
+    const client = await MongoClient.connect(url, { useUnifiedTopology: true })
     const db = client.db(datasource.config.db)
     const collections = await db.listCollections().toArray()
     resolve(collections.map(collection => collection.name))
@@ -30,9 +33,10 @@ exports.getDocList = ({ datasource }) => new Promise(async (resolve, reject) => 
 })
 
 exports.getFieldList = ({ datasource, docId }) => new Promise(async (resolve, reject) => {
-  const { server, port } = datasource.config
+  const { db, user, password, server, port } = datasource.config
+  const { url } = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
   try {
-    const client = await MongoClient.connect(`mongodb://${server}:${port}`, { useUnifiedTopology: true })
+    const client = await MongoClient.connect(url, { useUnifiedTopology: true })
     const db = client.db(datasource.config.db)
     const fieldList = await db.collection(docId).mapReduce(
       function () {
@@ -51,9 +55,10 @@ exports.getFieldList = ({ datasource, docId }) => new Promise(async (resolve, re
 
 
 exports.queryDatasource = ({ datasource, docId, query }) => new Promise(async (resolve, reject) => {
-  const { server, port } = datasource.config
+  const { db, user, password, server, port } = datasource.config
+  const { url } = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
   try {
-    const client = await MongoClient.connect(`mongodb://${server}:${port}`, { useUnifiedTopology: true })
+    const client = await MongoClient.connect(url, { useUnifiedTopology: true })
     const db = client.db(datasource.config.db)
     const collection = db.collection(docId)
     const queryResult = await collection.find(query).toArray()

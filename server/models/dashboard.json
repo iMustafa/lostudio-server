@@ -6,6 +6,7 @@
     "validateUpsert": true
   },
   "mixins": {
+    "AutoSetUser": true,
     "OwnerRestrictedStaticMethods": true
   },
   "properties": {
@@ -33,6 +34,11 @@
       "type": "belongsTo",
       "model": "DataSource",
       "foreignKey": ""
+    },
+    "dashboardRoleMappings": {
+      "type": "hasMany",
+      "model": "DashboardRoleMapping",
+      "foreignKey": ""
     }
   },
   "acls": [
@@ -46,13 +52,37 @@
       "principalType": "ROLE",
       "principalId": "$authenticated",
       "permission": "ALLOW",
-      "property": "_count"
+      "property": "collaborations"
     },
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
       "permission": "ALLOW",
-      "property": "_patchOrCreate"
+      "property": "_count"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "dashboardEditor",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "dashboardViewer",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
     }
   ],
   "methods": {}

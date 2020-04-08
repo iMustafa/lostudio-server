@@ -5,12 +5,22 @@
   "options": {
     "validateUpsert": true
   },
+  "mixins": {
+    "AutoSetUser": true,
+    "OwnerRestrictedStaticMethods": true
+  },
   "properties": {
     "title": {
       "type": "string"
     },
     "description": {
       "type": "string"
+    },
+    "layout": {
+      "type": "object"
+    },
+    "data": {
+      "type": "object"
     },
     "config": {
       "type": "object"

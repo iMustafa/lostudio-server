@@ -1,34 +1,33 @@
 {
-  "name": "DataSource",
+  "name": "Invitation",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
-  "mixins": {
-    "AutoSetUser": true,
-    "OwnerRestrictedStaticMethods": true
-  },
   "properties": {
-    "title": {
-      "type": "string"
-    },
     "type": {
       "type": "string"
     },
-    "description": {
+    "email": {
       "type": "string"
     },
-    "config": {
-      "type": "object"
+    "status": {
+      "type": "string",
+      "default": "pending"
     }
   },
   "validations": [],
   "relations": {
-    "user": {
+    "organization": {
       "type": "belongsTo",
       "model": "user",
-      "foreignKey": ""
+      "foreignKey": "organizationId"
+    },
+    "collaborator": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "collaboratorId"
     }
   },
   "acls": [],

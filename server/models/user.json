@@ -5,7 +5,35 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "countryCode": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "roleString": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    }
+  },
   "validations": [],
   "relations": {
     "widgetSettings": {
@@ -25,6 +53,11 @@
       "model": "DataSource",
       "foreignKey": "",
       "through": "UserDataSource"
+    },
+    "notifications": {
+      "type": "hasMany",
+      "model": "Notifications",
+      "foreignKey": ""
     }
   },
   "acls": [

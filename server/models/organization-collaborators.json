@@ -1,5 +1,5 @@
 {
-  "name": "WidgetSettingsDataSource",
+  "name": "OrganizationCollaborators",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -8,15 +8,15 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "dataSource": {
+    "organization": {
       "type": "belongsTo",
-      "model": "DataSource",
-      "foreignKey": ""
+      "model": "user",
+      "foreignKey": "organizationId"
     },
-    "widgetSettings": {
+    "collaborator": {
       "type": "belongsTo",
-      "model": "WidgetSettings",
-      "foreignKey": ""
+      "model": "user",
+      "foreignKey": "collaboratorId"
     }
   },
   "acls": [],

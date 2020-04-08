@@ -71,5 +71,21 @@
   "UserDataSource": {
     "dataSource": "db",
     "public": false
+  },
+  "Invitation": {
+    "dataSource": "db",
+    "public": true
+  },
+  "DashboardRoleMapping": {
+    "dataSource": "db",
+    "public": false
+  },
+  "OrganizationCollaborators": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Notifications": {
+    "dataSource": "db",
+    "public": true
   }
 }

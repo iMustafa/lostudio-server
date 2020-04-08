@@ -2,7 +2,7 @@
 
 var loopback = require('loopback');
 var boot = require('loopback-boot');
-
+process.env.DEBUG = 'loopback:security:acl'
 var app = module.exports = loopback();
 
 app.start = function() {

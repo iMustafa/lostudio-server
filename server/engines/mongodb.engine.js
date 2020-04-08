@@ -1,9 +1,11 @@
 const MongoClient = require('mongodb').MongoClient
+const _ = require('lodash')
+
+const fieldsToProjection = (fields) => _(fields).map(field => ({ [field]: 1 })).value()
 
 exports.testConnection = ({ datasource }) => new Promise(async (resolve, reject) => {
   const { db, user, password, server, port } = datasource.config
   const url = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
-  console.log(url)
   try {
     const connection = await MongoClient.connect(url, { useUnifiedTopology: true })
     await connection.close(true)
@@ -21,7 +23,7 @@ exports.testConnection = ({ datasource }) => new Promise(async (resolve, reject)
 
 exports.getDocList = ({ datasource }) => new Promise(async (resolve, reject) => {
   const { db, user, password, server, port } = datasource.config
-  const { url } = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
+  const url = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
   try {
     const client = await MongoClient.connect(url, { useUnifiedTopology: true })
     const db = client.db(datasource.config.db)
@@ -34,7 +36,7 @@ exports.getDocList = ({ datasource }) => new Promise(async (resolve, reject) => 
 
 exports.getFieldList = ({ datasource, docId }) => new Promise(async (resolve, reject) => {
   const { db, user, password, server, port } = datasource.config
-  const { url } = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
+  const url = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
   try {
     const client = await MongoClient.connect(url, { useUnifiedTopology: true })
     const db = client.db(datasource.config.db)
@@ -56,12 +58,27 @@ exports.getFieldList = ({ datasource, docId }) => new Promise(async (resolve, re
 
 exports.queryDatasource = ({ datasource, docId, query }) => new Promise(async (resolve, reject) => {
   const { db, user, password, server, port } = datasource.config
-  const { url } = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
+  const url = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
   try {
     const client = await MongoClient.connect(url, { useUnifiedTopology: true })
     const db = client.db(datasource.config.db)
     const collection = db.collection(docId)
     const queryResult = await collection.find(query).toArray()
+    resolve(queryResult)
+  } catch (e) {
+    reject(e)
+  }
+})
+
+exports.executeWidgetQuery = ({ datasource, config }) => new Promise(async (resolve, reject) => {
+  try {
+    const { db, user, password, server, port } = datasource.config
+    const { docId, fields, type, func, query } = config
+    const url = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
+    const client = await MongoClient.connect(url, { useUnifiedTopology: true })
+    const $db = client.db(db)
+    const collection = $db.collection(docId)
+    const queryResult = await collection[func](query).project(Object.assign({}, ...fieldsToProjection(fields))).toArray()
     resolve(queryResult)
   } catch (e) {
     reject(e)

@@ -1,0 +1,42 @@
+{
+  "name": "DashboardRoleMapping",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "editor": {
+      "type": "boolean",
+      "default": false
+    },
+    "viewer": {
+      "type": "boolean",
+      "default": false
+    },
+    "sent": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "organization": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "organizationId"
+    },
+    "collaborator": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "collaboratorId"
+    },
+    "dashboard": {
+      "type": "belongsTo",
+      "model": "Dashboard",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

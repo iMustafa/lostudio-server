@@ -24,6 +24,9 @@
     },
     "config": {
       "type": "object"
+    },
+    "properties": {
+      "type": "object"
     }
   },
   "validations": [],

@@ -45,6 +45,11 @@
       "type": "belongsTo",
       "model": "DataSource",
       "foreignKey": ""
+    },
+    "subWidgetSettings": {
+      "type": "hasMany",
+      "model": "SubWidgetSettings",
+      "foreignKey": ""
     }
   },
   "acls": [],

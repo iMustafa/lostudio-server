@@ -1,0 +1,24 @@
+{
+  "name": "SubWidgetSettings",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "widgetSettings": {
+      "type": "belongsTo",
+      "model": "WidgetSettings",
+      "foreignKey": ""
+    },
+    "subWidgetSettings": {
+      "type": "belongsTo",
+      "model": "WidgetSettings",
+      "foreignKey": "subWidgetSettingsId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

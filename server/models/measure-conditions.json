@@ -1,0 +1,35 @@
+{
+  "name": "MeasureConditions",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "expression": {
+      "type": "string"
+    },
+    "field": {
+      "type": "string"
+    },
+    "minValue": {
+      "type": "number"
+    },
+    "maxValue": {
+      "type": "number"
+    },
+    "color": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "widgetSettings": {
+      "type": "belongsTo",
+      "model": "WidgetSettings",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -84,3 +84,48 @@ exports.executeWidgetQuery = ({ datasource, config }) => new Promise(async (reso
     reject(e)
   }
 })
+
+exports.addDocument = ({ datasource, config, data }) => new Promise(async (resolve, reject) => {
+  try {
+    const { db, user, password, server, port } = datasource.config
+    const { docId } = config
+    const url = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
+    const client = await MongoClient.connect(url, { useUnifiedTopology: true })
+    const $db = client.db(db)
+    const collection = $db.collection(docId)
+    const queryResult = await collection.insert(data)
+    resolve(queryResult)
+  } catch (e) {
+    reject(e)
+  }
+})
+
+exports.editDocument = ({ datasource, config, data, keyId }) => new Promise(async (resolve, reject) => {
+  try {
+    const { db, user, password, server, port } = datasource.config
+    const { docId, primaryKey } = config
+    const url = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
+    const client = await MongoClient.connect(url, { useUnifiedTopology: true })
+    const $db = client.db(db)
+    const collection = $db.collection(docId)
+    const queryResult = await collection.updateOne({ [primaryKey]: keyId }, { $set: data })
+    resolve(queryResult)
+  } catch (e) {
+    reject(e)
+  }
+})
+
+exports.deleteDocument = ({ datasource, config, keyId }) => new Promise(async (resolve, reject) => {
+  try {
+    const { db, user, password, server, port } = datasource.config
+    const { docId, primaryKey } = config
+    const url = user && password ? `mongodb://${user}:${password}@${server}:${port}/${db}` : `mongodb://${server}:${port}/${db}`
+    const client = await MongoClient.connect(url, { useUnifiedTopology: true })
+    const $db = client.db(db)
+    const collection = $db.collection(docId)
+    const queryResult = await collection.deleteOne({ [primaryKey]: keyId })
+    resolve(queryResult)
+  } catch (e) {
+    reject(e)
+  }
+})

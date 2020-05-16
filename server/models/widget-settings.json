@@ -50,6 +50,11 @@
       "type": "hasMany",
       "model": "SubWidgetSettings",
       "foreignKey": ""
+    },
+    "measureConditions": {
+      "type": "hasMany",
+      "model": "MeasureConditions",
+      "foreignKey": ""
     }
   },
   "acls": [],

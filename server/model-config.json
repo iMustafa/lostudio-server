@@ -91,5 +91,9 @@
   "SubWidgetSettings": {
     "dataSource": "db",
     "public": false
+  },
+  "MeasureConditions": {
+    "dataSource": "db",
+    "public": false
   }
 }

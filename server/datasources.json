@@ -1,12 +1,12 @@
 {
   "db": {
     "host": "localhost",
-    "port": 27017,
-    "url": "mongodb://localhost:27017/lostudio",
+    "port": 41121,
+    "url": "mongodb://admin:12321Aa@ds241121.mlab.com:41121/lostudio",
     "database": "lostudio",
-    "password": "",
+    "password": "12321Aa",
     "name": "db",
-    "user": "",
+    "user": "admin",
     "connector": "mongodb",
     "useNewUrlParser": true,
     "allowExtendedOperators": true,

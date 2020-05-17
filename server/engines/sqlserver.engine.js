@@ -1,11 +1,14 @@
 const mssql = require('mssql');
+var jsonSql = require('json-sql')();
 
-exports.checkConnection = ({ datasource }) => new Promise(async (resolve, reject) => {
+exports.testConnection = ({ datasource }) => new Promise(async (resolve, reject) => {
   try {
     const ConnectionPool = new mssql.ConnectionPool({ ...datasource.config, options: { encrypt: true } });
     const connection = await ConnectionPool.connect()
     resolve({ status: true, message: "Database connection test passed" });
   } catch (e) {
+    console.log('>> CONNECTION ERROR')
+    console.log(e)
     reject({ status: "Connection Failed", data: e });
   }
 });
@@ -23,7 +26,7 @@ exports.getDocList = ({ datasource }) => new Promise(async (resolve, reject) => 
          `;
     const data = await request.query(query)
     connection.close();
-    const recordset = data.recordset.map(record => { return { docid: record.TABLE_NAME, docname: record.TABLE_NAME } })
+    const recordset = data.recordset.map(record => record.TABLE_NAME)
     resolve(recordset);
   } catch (e) {
     reject(e);
@@ -42,24 +45,101 @@ exports.getFieldList = ({ datasource, docId }) => new Promise(async (resolve, re
         `;
     const data = await request.query(query)
     connection.close();
-    const recordset = data.recordset.map(record => { return { fieldname: record.COLUMN_NAME, type: record.DATA_TYPE } })
+    // const recordset = data.recordset.map(record => { return { fieldname: record.COLUMN_NAME, type: record.DATA_TYPE } })
+    const recordset = data.recordset.map(record => record.COLUMN_NAME)
     resolve(recordset);
   } catch (e) {
     reject(e);
   }
-
-  exports.queryDatasource = ({ datasource, query }) => new Promise(async (resolve, reject) => {
-    try {
-      const ConnectionPool = new mssql.ConnectionPool({ ...datasource.config, options: { encrypt: true } });
-      const connection = await ConnectionPool.connect()
-      const request = new mssql.Request(connection);
-      const data = await request.query(query)
-      connection.close();
-      resolve(data);
-    } catch (e) {
-      reject(e);
-    }
-
-  });
-
 });
+
+exports.queryDatasource = ({ datasource, query }) => new Promise(async (resolve, reject) => {
+  try {
+    const ConnectionPool = new mssql.ConnectionPool({ ...datasource.config, options: { encrypt: true } });
+    const connection = await ConnectionPool.connect()
+    const request = new mssql.Request(connection);
+    const data = await request.query(query)
+    connection.close();
+    resolve(data);
+  } catch (e) {
+    reject(e);
+  }
+});
+
+exports.executeWidgetQuery = ({ datasource, config }) => new Promise(async (resolve, reject) => {
+  try {
+    const { docId, fields, query } = config
+    const ConnectionPool = new mssql.ConnectionPool({ ...datasource.config, options: { encrypt: true } });
+    const connection = await ConnectionPool.connect()
+    const request = new mssql.Request(connection);
+    const sql = jsonSql.build({
+      type: 'select',
+      table: docId,
+      fields,
+      condition: query
+    })
+    const data = await request.query(sql.query)
+    connection.close()
+    resolve(data)
+  } catch (e) {
+    reject(e)
+  }
+})
+
+exports.addDocument = ({ datasource, config, data }) => new Promise(async (resolve, reject) => {
+  try {
+    const { docId } = config
+    const ConnectionPool = new mssql.ConnectionPool({ ...datasource.config, options: { encrypt: true } });
+    const connection = await ConnectionPool.connect()
+    const request = new mssql.Request(connection);
+    const sql = jsonSql.build({
+      type: 'insert',
+      table: docId,
+      values: data
+    })
+    const $data = await request.query(sql.query)
+    connection.close()
+    resolve($data)
+  } catch (e) {
+    reject(e)
+  }
+})
+
+exports.editDocumnet = ({ datasource, config, data, keyId }) => new Promise(async (resolve, reject) => {
+  try {
+    const { docId, primaryKey } = config
+    const ConnectionPool = new mssql.ConnectionPool({ ...datasource.config, options: { encrypt: true } });
+    const connection = await ConnectionPool.connect()
+    const request = new mssql.Request(connection);
+    const sql = jsonSql.build({
+      type: 'update',
+      table: docId,
+      conditions: { [primaryKey]: keyId },
+      modifier: data
+    })
+    const $data = await request.query(sql.query)
+    connection.close()
+    resolve($data)
+  } catch (e) {
+    reject(e)
+  }
+})
+
+exports.deleteDocument = ({ datasource, config, keyId }) => new Promise(async (resolve, reject) => {
+  try {
+    const { docId, primaryKey } = config
+    const ConnectionPool = new mssql.ConnectionPool({ ...datasource.config, options: { encrypt: true } });
+    const connection = await ConnectionPool.connect()
+    const request = new mssql.Request(connection);
+    const sql = jsonSql.build({
+      type: 'remove',
+      table: docId,
+      condition: { [primaryKey]: keyId }
+    })
+    const data = await request.query(sql.query)
+    connection.close();
+    resolve(data);
+  } catch (e) {
+    reject(e)
+  }
+})

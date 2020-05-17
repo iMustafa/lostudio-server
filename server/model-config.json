@@ -95,5 +95,9 @@
   "MeasureConditions": {
     "dataSource": "db",
     "public": false
+  },
+  "SubDashboard": {
+    "dataSource": "db",
+    "public": false
   }
 }

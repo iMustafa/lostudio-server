@@ -15,6 +15,7 @@
     "cors": "^2.5.2",
     "helmet": "^3.10.0",
     "json-csv": "^3.0.1",
+    "json-sql": "^0.4.11",
     "lodash": "^4.17.15",
     "loopback": "^3.22.0",
     "loopback-boot": "^2.6.5",

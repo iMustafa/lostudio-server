@@ -4,6 +4,7 @@ const Engines = require('../engines')
 module.exports = function (Datasource) {
 
   Datasource.beforeRemote('create', (ctx, _, _next) => new Promise(async (resolve, reject) => {
+    ctx.args.data.config.port = parseInt(ctx.args.data.config.port)
     const { data } = ctx.args
     try {
       const connection = await Engines[data.type].testConnection({ datasource: data })

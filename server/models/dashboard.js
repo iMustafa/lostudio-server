@@ -2,6 +2,41 @@
 
 module.exports = function (Dashboard) {
 
+  Dashboard.remoteMethod('postGrapes', {
+    description: 'Insert document into widget datasource',
+    accessType: 'WRITE',
+    isStatic: false,
+    accepts: [
+      { arg: 'data', type: 'object', http: { source: 'body' } },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
+    ],
+    returns: { arg: 'data', type: 'array', root: true },
+    http: { verb: 'post', path: '/grapes' }
+  })
+  Dashboard.prototype.postGrapes = function (data, options) {
+    return new Promise(async (resolve, reject) => {
+      await this.updateAttributes({ grapes: data })
+      resolve(data)
+    })
+  }
+
+  Dashboard.remoteMethod('getGrapes', {
+    description: 'Insert document into widget datasource',
+    accessType: 'WRITE',
+    isStatic: false,
+    accepts: [
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
+    ],
+    returns: { arg: 'data', type: 'array', root: true },
+    http: { verb: 'get', path: '/grapes' }
+  })
+  Dashboard.prototype.getGrapes = function (options) {
+    return new Promise(async (resolve, reject) => {
+      this.grapes ? resolve(this.grapes) : resolve({})
+    })
+  }
+
+
   Dashboard.beforeRemote('*.__create__dashboardRoleMappings', (ctx, instance, _) => new Promise(async (resolve, reject) => {
     try {
       const { DashboardRoleMapping } = Dashboard.app.models

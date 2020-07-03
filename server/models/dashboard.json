@@ -19,6 +19,9 @@
     },
     "isSub": {
       "type": "boolean"
+    },
+    "type": {
+      "type": "string"
     }
   },
   "validations": [],
